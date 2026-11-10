@@ -8,9 +8,13 @@ on:
 jobs:
   run-ai:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout do Repositório
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Configurar Python
         uses: actions/setup-python@v5
@@ -27,4 +31,4 @@ jobs:
           git config --global user.email "bot@github.local"
           git add memory/
           git commit -m "update: memória e aprendizado atualizados" || echo "Sem mudanças para commit"
-          git push
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git main
