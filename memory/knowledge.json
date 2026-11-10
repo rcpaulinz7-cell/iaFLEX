@@ -1,7 +1,11 @@
 {
   "aprendizados": [
     {
+<<<<<<< HEAD
       "comando": "Olá IA, você está online?",
+=======
+      "comando": "Executando via GitHub Actions",
+>>>>>>> c523bbdb8e05b72003fe371ca6061bfb2745ef52
       "status": "executado"
     }
   ],
