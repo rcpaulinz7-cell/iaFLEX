@@ -1,0 +1,30 @@
+name: IA Worker
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  run-ai:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do Repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Executar Agente
+        run: |
+          python src/agent.py "Executando via GitHub Actions"
+
+      - name: Salvar Memória e Commit
+        run: |
+          git config --global user.name "IA Bot Automático"
+          git config --global user.email "bot@github.local"
+          git add memory/
+          git commit -m "update: memória e aprendizado atualizados" || echo "Sem mudanças para commit"
+          git push
