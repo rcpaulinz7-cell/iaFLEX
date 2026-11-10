@@ -34,7 +34,7 @@ def main():
     print(f"\nVocê: {user_prompt}")
     
     completion = client.chat.completions.create(
-        model="llama-3.1-70b-versatile",
+        model="llama-3-70b-8192",
         messages=[
             {"role": "system", "content": "Você é uma IA autônoma chamada iaFLEX, prestativa e inteligente."},
             {"role": "user", "content": user_prompt}
