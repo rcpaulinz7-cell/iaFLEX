@@ -33,16 +33,20 @@ def main():
 
     print(f"\nVocê: {user_prompt}")
     
-    # Lista de modelos suportados em ordem de preferência
-    models_to_try = [
-        "llama-3.3-70b-versatile",
-        "llama-3.1-8b-instant"
-    ]
+    # Busca a lista de modelos ativos disponíveis na API
+    models_list = client.models.list()
+    available_models = [m.id for m in models_list.data if "whisper" not in m.id and "guard" not in m.id]
     
+    if not available_models:
+        print("Erro: Nenhum modelo de texto foi encontrado na sua conta do Groq.")
+        sys.exit(1)
+        
+    print(f"Modelos de texto disponíveis encontrados: {available_models}")
+
     ai_reply = None
-    for model_name in models_to_try:
+    for model_name in available_models:
         try:
-            print(f"Tentando comunicação com o modelo: {model_name}...")
+            print(f"Tentando executar com o modelo: {model_name}...")
             completion = client.chat.completions.create(
                 model=model_name,
                 messages=[
@@ -52,13 +56,13 @@ def main():
                 temperature=0.7,
             )
             ai_reply = completion.choices[0].message.content
-            print(f"Sucesso ao utilizar o modelo {model_name}!")
+            print(f"Sucesso! Resposta obtida do modelo: {model_name}")
             break
         except Exception as e:
-            print(f"Erro ao utilizar {model_name}: {e}")
+            print(f"Falha no modelo {model_name}: {e}")
 
     if not ai_reply:
-        print("Erro crítico: Nenhum modelo da Groq respondeu com sucesso.")
+        print("Erro crítico: Não foi possível obter resposta de nenhum modelo.")
         sys.exit(1)
 
     print(f"\nIA: {ai_reply}\n")
