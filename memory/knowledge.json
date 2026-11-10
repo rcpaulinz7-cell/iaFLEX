@@ -1,5 +1,10 @@
 {
-  "aprendizados": [],
+  "aprendizados": [
+    {
+      "comando": "Executando via GitHub Actions",
+      "status": "executado"
+    }
+  ],
   "config": {
     "direto_ao_ponto": true,
     "idioma": "pt-BR"
