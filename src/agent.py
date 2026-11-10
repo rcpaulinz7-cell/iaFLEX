@@ -33,16 +33,34 @@ def main():
 
     print(f"\nVocê: {user_prompt}")
     
-    completion = client.chat.completions.create(
-        model="llama-3.1-8b-instant",
-        messages=[
-            {"role": "system", "content": "Você é uma IA autônoma chamada iaFLEX, prestativa e inteligente."},
-            {"role": "user", "content": user_prompt}
-        ],
-        temperature=0.7,
-    )
+    # Lista de modelos suportados em ordem de preferência
+    models_to_try = [
+        "llama-3.3-70b-versatile",
+        "llama-3.1-8b-instant"
+    ]
     
-    ai_reply = completion.choices[0].message.content
+    ai_reply = None
+    for model_name in models_to_try:
+        try:
+            print(f"Tentando comunicação com o modelo: {model_name}...")
+            completion = client.chat.completions.create(
+                model=model_name,
+                messages=[
+                    {"role": "system", "content": "Você é uma IA autônoma chamada iaFLEX, prestativa e inteligente."},
+                    {"role": "user", "content": user_prompt}
+                ],
+                temperature=0.7,
+            )
+            ai_reply = completion.choices[0].message.content
+            print(f"Sucesso ao utilizar o modelo {model_name}!")
+            break
+        except Exception as e:
+            print(f"Erro ao utilizar {model_name}: {e}")
+
+    if not ai_reply:
+        print("Erro crítico: Nenhum modelo da Groq respondeu com sucesso.")
+        sys.exit(1)
+
     print(f"\nIA: {ai_reply}\n")
 
     memory["history"].append({
